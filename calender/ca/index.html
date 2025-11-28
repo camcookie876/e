@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canada Holidays Countdown</title>
+  <style>
+    body {
+      background: #0099ff;
+      color: #fff;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .holiday {
+      margin: 20px;
+      padding: 5px;
+      border: 2px solid #0099ff;
+      border-radius: 10px;
+      background: #fff;
+      display: inline-block;
+      width: 300px;
+      color: #0099ff;
+    }
+    .holiday h1 {
+      font-size: 1.5rem;
+    }
+    .holiday p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Canadian Holidays Countdown</h1>
+
+  <div class="holiday"><h1>New Year's Day</h1><p id="newyear"></p></div>
+  <div class="holiday"><h1>Valentine's Day</h1><p id="valentine"></p></div>
+  <div class="holiday"><h1>Family Day</h1><p id="familyday"></p></div>
+  <div class="holiday"><h1>Good Friday</h1><p id="goodfriday"></p></div>
+  <div class="holiday"><h1>Easter Sunday</h1><p id="easter"></p></div>
+  <div class="holiday"><h1>Victoria Day</h1><p id="victoria"></p></div>
+  <div class="holiday"><h1>Canada Day</h1><p id="canadaday"></p></div>
+  <div class="holiday"><h1>Civic Holiday</h1><p id="civic"></p></div>
+  <div class="holiday"><h1>Labour Day</h1><p id="labor"></p></div>
+  <div class="holiday"><h1>National Day for Truth and Reconciliation</h1><p id="truth"></p></div>
+  <div class="holiday"><h1>Thanksgiving</h1><p id="thanksgiving"></p></div>
+  <div class="holiday"><h1>Halloween</h1><p id="halloween"></p></div>
+  <div class="holiday"><h1>Remembrance Day</h1><p id="remembrance"></p></div>
+  <div class="holiday"><h1>Christmas</h1><p id="christmas"></p></div>
+  <div class="holiday"><h1>Boxing Day</h1><p id="boxing"></p></div>
+
+  <script>
+    // Utility: nth weekday of month
+    function nthWeekday(year, month, weekday, n) {
+      let date = new Date(year, month, 1);
+      let count = 0;
+      while (true) {
+        if (date.getDay() === weekday) {
+          count++;
+          if (count === n) return date;
+        }
+        date.setDate(date.getDate() + 1);
+      }
+    }
+
+    // Utility: Easter calculation (Western)
+    function getEaster(year) {
+      const f = Math.floor,
+        G = year % 19,
+        C = f(year / 100),
+        H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30,
+        I = H - f(H / 28) * (1 - f(H / 28) * f(29 / (H + 1)) * f((21 - G) / 11)),
+        J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7,
+        L = I - J,
+        month = 3 + f((L + 40) / 44),
+        day = L + 28 - 31 * f(month / 4);
+      return new Date(year, month - 1, day);
+    }
+
+    function getHolidayDate(id, yearOverride = null) {
+      const now = new Date();
+      let year = yearOverride || now.getFullYear();
+      let date;
+
+      switch(id) {
+        case "newyear": date = new Date(year, 0, 1); break;
+        case "valentine": date = new Date(year, 1, 14); break;
+        case "familyday": date = nthWeekday(year, 1, 1, 3); break; // 3rd Monday Feb
+        case "goodfriday": date = getEaster(year); date.setDate(date.getDate() - 2); break;
+        case "easter": date = getEaster(year); break;
+        case "victoria": date = nthWeekday(year, 4, 1, 3); break; // Monday before May 25
+        case "canadaday": date = new Date(year, 6, 1); break;
+        case "civic": date = nthWeekday(year, 7, 1, 1); break; // 1st Monday Aug
+        case "labor": date = nthWeekday(year, 8, 1, 1); break; // 1st Monday Sep
+        case "truth": date = new Date(year, 8, 30); break; // Sept 30
+        case "thanksgiving": date = nthWeekday(year, 9, 1, 2); break; // 2nd Monday Oct
+        case "halloween": date = new Date(year, 9, 31); break;
+        case "remembrance": date = new Date(year, 10, 11); break;
+        case "christmas": date = new Date(year, 11, 25); break;
+        case "boxing": date = new Date(year, 11, 26); break;
+      }
+
+      if (date < now && !yearOverride) {
+        return getHolidayDate(id, year + 1);
+      }
+      return date;
+    }
+
+    function updateCountdowns() {
+      const now = new Date();
+      const ids = ["newyear","valentine","familyday","goodfriday","easter","victoria","canadaday","civic","labor","truth","thanksgiving","halloween","remembrance","christmas","boxing"];
+
+      ids.forEach(id => {
+        const targetDate = getHolidayDate(id);
+        const diff = targetDate - now;
+        const el = document.getElementById(id);
+
+        if (!el) return;
+
+        if (diff <= 0) {
+          el.textContent = "It's here!";
+          return;
+        }
+
+        let seconds = Math.floor(diff / 1000);
+        const years = Math.floor(seconds / (365*24*60*60));
+        seconds -= years * 365*24*60*60;
+
+        const months = Math.floor(seconds / (30*24*60*60));
+        seconds -= months * 30*24*60*60;
+
+        const days = Math.floor(seconds / (24*60*60));
+        seconds -= days * 24*60*60;
+
+        const hours = Math.floor(seconds / 3600);
+        seconds -= hours * 3600;
+
+        const minutes = Math.floor(seconds / 60);
+        seconds -= minutes * 60;
+
+        let parts = [];
+        if (years > 0) parts.push(`${years} year${years>1?"s":""}`);
+        if (months > 0) parts.push(`${months} month${months>1?"s":""}`);
+        if (days > 0) parts.push(`${days} day${days>1?"s":""}`);
+        if (hours > 0) parts.push(`${hours} hour${hours>1?"s":""}`);
+        if (minutes > 0) parts.push(`${minutes} min${minutes>1?"s":""}`);
+        if (seconds > 0 || minutes > 0) parts.push(`${seconds} sec${seconds>1?"s":""}`);
+
+        el.textContent = parts.join(", ");
+      });
+    }
+
+    setInterval(updateCountdowns, 1000);
+    updateCountdowns();
+  </script>
+</body>
+</html>
