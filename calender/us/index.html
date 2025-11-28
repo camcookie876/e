@@ -150,8 +150,8 @@
         if (months > 0) parts.push(`${months} month${months>1?"s":""}`);
         if (days > 0) parts.push(`${days} day${days>1?"s":""}`);
         if (hours > 0) parts.push(`${hours} hour${hours>1?"s":""}`);
-        if (minutes > 0) parts.push(`${minutes} min${minutes>1?"s":""}`);
-        if (seconds > 0 || minutes > 0) parts.push(`${seconds} sec${seconds>1?"s":""}`);
+        if (minutes > 0) parts.push(`${minutes} minute${minutes>1?"s":""}`);
+        if (seconds > 0 || minutes > 0) parts.push(`${seconds} Second${seconds>1?"s":""}`);
 
         el.textContent = parts.join(", ");
       });
