@@ -1,0 +1,11 @@
+Storage:
+Winter 2025-2026 dropdown. Dropdown format
+<span class="dropdown"> <a class="Topbarlink" href="#">Winter ▾</a> <div class="dropdown-content"> <a href="https://camcookie876.github.io/e/w20252026/">Winter Home</a> <a href="https://camcookie876.github.io/e/game/w20252026/">Winter Games</a> <a href="https://camcookie876.github.io/e/vid/w20252026/">Winter Videos</a> </div> </span>
+
+---
+
+Winter 2025-2026 smallspace code:
+
+    <a href="https://camcookie876.github.io/e/w20252026/">Winter Season Home</a>
+    <a href="https://camcookie876.github.io/e/vid/w20252026/">Winter Season Videos</a>
+    <a href="https://camcookie876.github.io/e/game/w20252026/">Winter Season Games</a>
